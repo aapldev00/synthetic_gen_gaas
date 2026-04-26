@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package generator.v1;
+
+/*
+ * Synthetic Data Generation Service
+ * 
+ * This service provides a high-performance interface for generating massive
+ * synthetic datasets using binary streaming. It supports ad-hoc schema 
+ * definitions and persistent schema retrieval.
+ */
+
+option go_package = "github.com/aapldev00/synthetic_gen_gaas/pkg/genproto";
+
+// GeneratorService defines the capabilities for synthetic data orchestration.
+service GeneratorService {
+  // StreamGenerate initiates a server-side streaming connection.
+  // The server will push generated records as they are produced until 
+  // the requested count is reached or the context is cancelled.
+  rpc StreamGenerate(GenerateRequest) returns (stream GeneratedRecord);
+}
+
+// GenerateRequest defines the configuration for a generation job.
+message GenerateRequest {
+  // Selection of the data schema to be used for generation.
+  oneof source {
+    // Reference to a previously persisted schema ID in the database.
+    string schema_id = 1;
+    // Ad-hoc schema definition for immediate use without prior persistence.
+    Schema inline_schema = 2;
+  }
+
+  // Total number of records to be generated. Supports massive volumes.
+  uint64 count = 3;
+
+  // Seed for the pseudo-random number generator.
+  // Use the same seed with the same schema to achieve deterministic output.
+  uint32 seed = 4;
+}
+
+// Schema represents the blueprint of the dataset to be generated.
+message Schema {
+  // Human-readable name for the schema.
+  string name = 1;
+  // Ordered collection of fields that define the dataset structure.
+  repeated Field fields = 2;
+}
+
+// Field represents a single column in the dataset.
+message Field {
+  // Name of the column (e.g., "id", "customer_name", "transaction_amount").
+  string name = 1;
+  // Identifier for the data provider/generator (e.g., "uuid", "int_range", "email").
+  string provider = 2;
+  // List of configuration parameters for the provider.
+  repeated Option options = 3;
+}
+
+// Option provides type-safe configuration for field providers.
+// This design avoids runtime string parsing, optimizing CPU cycles.
+message Option {
+  // Parameter name (e.g., "min", "max", "format", "distribution").
+  string key = 1;
+
+  // Type-specific value for the option.
+  oneof value {
+    string string_val = 2; // For patterns, formats, or categories.
+    int64 int_val = 3;     // For discrete bounds and counts.
+    double float_val = 4;  // For continuous bounds and weights.
+    bool bool_val = 5;     // For toggleable features (e.g., "nullable").
+  }
+}
+
+// GeneratedRecord represents a single row of generated data.
+message GeneratedRecord {
+  // Ordered list of values corresponding to the schema fields.
+  // Values are converted to string for transport but follow the schema order.
+  repeated string values = 1;
+}
