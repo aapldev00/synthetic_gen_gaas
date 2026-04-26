@@ -1,0 +1,43 @@
+# Binaries and individual files
+# Ignoramos cualquier archivo ejecutable que generemos al compilar
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+synthetic_gen_gaas
+
+# Go specific
+# El archivo go.sum NO se ignora (es importante para la seguridad)
+# Ignoramos la carpeta vendor si decides usarla (hoy en día no es común subirla)
+vendor/
+
+# Test coverage
+*.out
+*.test
+*.prof
+
+# IDEs and Editors
+# Ignoramos configuraciones personales de VS Code o JetBrains
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment variables
+# Nunca subas secretos o claves a GitHub
+.env
+.env.local
+
+# Proto generated files (Debate técnico abajo)
+# pkg/genproto/*.go
