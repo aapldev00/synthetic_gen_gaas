@@ -22,3 +22,17 @@ clean:
 	@echo "Cleanup complete."
 
 .PHONY: proto clean
+
+# ... (variables anteriores)
+BINARY_NAME=generator-server
+
+# Build the binary
+build:
+	@echo "Building the binary..."
+	@mkdir -p bin
+	go build -o bin/$(BINARY_NAME) cmd/server/main.go
+	@echo "Build complete: bin/$(BINARY_NAME)"
+
+# Run the application
+run: build
+	./bin/$(BINARY_NAME)
