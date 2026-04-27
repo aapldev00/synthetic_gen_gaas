@@ -3,6 +3,7 @@ module github.com/aapldev00/synthetic_gen_gaas
 go 1.26.2
 
 require (
+	github.com/google/uuid v1.6.0
 	google.golang.org/grpc v1.80.0
 	google.golang.org/protobuf v1.36.11
 )
