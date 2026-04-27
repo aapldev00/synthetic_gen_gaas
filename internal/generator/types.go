@@ -4,6 +4,8 @@
 package generator
 
 import (
+	"math/rand/v2"
+
 	"github.com/aapldev00/synthetic_gen_gaas/pkg/genproto"
 )
 
@@ -22,4 +24,4 @@ type GeneratorFunc func() any
 // performs semantic validation, and returns a closure (GeneratorFunc)
 // pre-loaded with the necessary configuration. It returns an error if
 // the provided options are invalid or insufficient for the generator's logic.
-type GeneratorFactory func(options []*genproto.Option) (GeneratorFunc, error)
+type GeneratorFactory func(r *rand.Rand, options []*genproto.Option) (GeneratorFunc, error)
