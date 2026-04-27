@@ -13,7 +13,7 @@ import (
 //
 // By returning a string, it ensures immediate compatibility with the
 // gRPC streaming layer, minimizing overhead during the execution phase.
-type GeneratorFunc func() string
+type GeneratorFunc func() any
 
 // GeneratorFactory is a higher-order function responsible for instantiating
 // and configuring a GeneratorFunc.

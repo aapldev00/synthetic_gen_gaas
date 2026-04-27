@@ -15,7 +15,7 @@ func init() {
 // UUIDFactory creates a new GeneratorFunc for UUID v4.
 // Since UUIDs don't require configuration for now, it simply ignores options.
 func UUIDFactory(options []*genproto.Option) (generator.GeneratorFunc, error) {
-	return func() string {
+	return func() any {
 		return uuid.NewString()
 	}, nil
 }
