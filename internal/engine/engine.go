@@ -121,3 +121,10 @@ func (e *Engine) worker(ctx context.Context, count uint64, plan *generator.Execu
 		out <- batch
 	}
 }
+
+// Release returns a Record instance to the internal synchronization pool.
+// It is the caller's responsibility to ensure the record is no longer
+// in use before calling this method.
+func (e *Engine) Release(r *Record) {
+	e.pool.Put(r)
+}
