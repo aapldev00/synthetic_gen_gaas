@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 1s # High-resolution scraping for performance benchmarking
+
+scrape_configs:
+  - job_name: 'gaas-engine'
+    static_configs:
+      - targets: ['gaas-engine:9090']

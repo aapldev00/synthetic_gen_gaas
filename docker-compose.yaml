@@ -1,0 +1,30 @@
+services:
+  gaas-engine:
+    build: .
+    ports:
+      - "50051:50051"
+      - "9090:9090"
+    networks:
+      - gas-net
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./infra/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9091:9090"
+    networks:
+      - gas-net
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - gas-net
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+networks:
+  gas-net:
+    driver: bridge
