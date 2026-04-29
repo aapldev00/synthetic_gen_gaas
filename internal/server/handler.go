@@ -7,6 +7,7 @@ import (
 
 	"github.com/aapldev00/synthetic_gen_gaas/internal/engine"
 	"github.com/aapldev00/synthetic_gen_gaas/internal/generator"
+	"github.com/aapldev00/synthetic_gen_gaas/internal/metrics"
 	"github.com/aapldev00/synthetic_gen_gaas/pkg/genproto"
 )
 
@@ -29,6 +30,10 @@ func NewServer() *Server {
 // It performs execution planning, resource allocation, and manages the
 // high-throughput transformation loop for gRPC delivery.
 func (s *Server) StreamGenerate(req *genproto.GenerateRequest, stream genproto.GeneratorService_StreamGenerateServer) error {
+
+	metrics.ActiveJobs.Inc()
+	defer metrics.ActiveJobs.Dec()
+
 	// Execution planning and schema validation.
 	plan, err := s.planner.BuildPlan(req)
 	if err != nil {
@@ -64,6 +69,10 @@ func (s *Server) StreamGenerate(req *genproto.GenerateRequest, stream genproto.G
 
 			// Post-dispatch record release to the synchronization pool.
 			eng.Release(record)
+
+			metrics.RecordsGenerated.Inc()
+			eng.Release(record)
+
 		}
 	}
 
