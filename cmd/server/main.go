@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	_ "github.com/aapldev00/synthetic_gen_gaas/internal/generator/providers"
 	"github.com/aapldev00/synthetic_gen_gaas/internal/server"
 	"github.com/aapldev00/synthetic_gen_gaas/pkg/genproto"
 	"google.golang.org/grpc"
